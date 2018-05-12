@@ -15,6 +15,8 @@ class StockQuote extends IEXTradingResponse {
     public $openTime;
     public $close;
     public $closeTime;
+    public $high;
+    public $low;
     public $latestPrice;
     public $latestSource;
     public $latestTime;
@@ -66,6 +68,8 @@ class StockQuote extends IEXTradingResponse {
         $this->openTime         = $a[ 'openTime' ];
         $this->close            = $a[ 'close' ];
         $this->closeTime        = $a[ 'closeTime' ];
+        $this->high             = $a[ 'high' ];
+        $this->low              = $a[ 'low' ];
         $this->latestPrice      = $a[ 'latestPrice' ];
         $this->latestSource     = $a[ 'latestSource' ];
         $this->latestTime       = $a[ 'latestTime' ];
