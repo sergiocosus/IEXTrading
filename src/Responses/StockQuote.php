@@ -92,11 +92,11 @@ class StockQuote extends IEXTradingResponse {
         $this->week52Low        = $a[ 'week52Low' ];
         $this->ytdChange        = $a[ 'ytdChange' ];
 
-        $this->carbonOpenTime         = Carbon::createFromTimestampUTC( $this->openTime );
-        $this->carbonCloseTime        = Carbon::createFromTimestampUTC( $this->closeTime );
-        $this->carbonLatestUpdate     = Carbon::createFromTimestampUTC( $this->latestUpdate );
-        $this->carbonIexLastUpdated   = Carbon::createFromTimestampUTC( $this->iexLastUpdated );
-        $this->carbonDelayedPriceTime = Carbon::createFromTimestampUTC( $this->delayedPriceTime );
+        $this->carbonOpenTime         = $this->openTime ? Carbon::createFromTimestampUTC( $this->openTime ) : null;
+        $this->carbonCloseTime        = $this->closeTime ? Carbon::createFromTimestampUTC( $this->closeTime ) : null;
+        $this->carbonLatestUpdate     = $this->latestUpdate ? Carbon::createFromTimestampUTC( $this->latestUpdate ) : null;
+        $this->carbonIexLastUpdated   = $this->iexLastUpdated ? Carbon::createFromTimestampUTC( $this->iexLastUpdated ) : null;
+        $this->carbonDelayedPriceTime = $this->delayedPriceTime ? Carbon::createFromTimestampUTC( $this->delayedPriceTime ) : null;
     }
 
 }
