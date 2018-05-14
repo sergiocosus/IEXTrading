@@ -118,6 +118,7 @@ class IEXTrading {
             case '3m':
             case '1m':
             case '1d':
+            case '5d':
             case 'dynamic':
                 $response = IEXTrading::makeRequest( 'GET', $uri );
                 break;
