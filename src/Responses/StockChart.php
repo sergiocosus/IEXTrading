@@ -16,6 +16,7 @@ class StockChart extends IEXTradingResponse {
     const OPTION_3M      = '3m';
     const OPTION_1M      = '1m';
     const OPTION_1D      = '1d';
+    const OPTION_5D      = '5d';
     const OPTION_DATE    = 'date';
     const OPTION_DYNAMIC = 'dynamic';
 
@@ -47,6 +48,7 @@ class StockChart extends IEXTradingResponse {
         $this->data   = new Collection();
         switch ( $option ):
             case StockChart::OPTION_5Y:
+            case StockChart::OPTION_5D:
             case StockChart::OPTION_2Y:
             case StockChart::OPTION_1Y:
             case StockChart::OPTION_YTD:
