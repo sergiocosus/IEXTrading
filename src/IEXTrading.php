@@ -14,6 +14,7 @@ use DPRMC\IEXTrading\Responses\StockPeers;
 use DPRMC\IEXTrading\Responses\StockPrice;
 use DPRMC\IEXTrading\Responses\StockQuote;
 use DPRMC\IEXTrading\Responses\StockRelevant;
+use DPRMC\IEXTrading\Responses\StockSymbols;
 use DPRMC\IEXTrading\Responses\StockStats;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -93,6 +94,13 @@ class IEXTrading {
         $response = IEXTrading::makeRequest( 'GET', $uri );
 
         return new StockRelevant( $response );
+    }
+
+    public static function stockSymbols() {
+        $uri      = 'ref-data/symbols';
+        $response = IEXTrading::makeRequest( 'GET', $uri );
+
+        return new StockSymbols( $response );
     }
 
 
