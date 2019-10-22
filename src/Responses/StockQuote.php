@@ -62,7 +62,7 @@ class StockQuote extends IEXTradingResponse {
         $this->symbol           = $a[ 'symbol' ];
         $this->companyName      = $a[ 'companyName' ];
         $this->primaryExchange  = $a[ 'primaryExchange' ];
-        $this->sector           = $a[ 'sector' ];
+        //$this->sector           = $a[ 'sector' ];
         $this->calculationPrice = $a[ 'calculationPrice' ];
         $this->open             = $a[ 'open' ];
         $this->openTime         = $a[ 'openTime' ];

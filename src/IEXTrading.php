@@ -21,7 +21,12 @@ use GuzzleHttp\Exception\ClientException;
 
 class IEXTrading {
 
-    const URL = 'https://api.iextrading.com/1.0/';
+    const URL = 'https://cloud.iexapis.com/v1/';
+    public static $apiToken;
+
+    public static function setApiToken($apiToken) {
+        self::$apiToken = $apiToken;
+    }
 
     /**
      * @param string $ticker Use market to get market-wide news
@@ -190,7 +195,7 @@ class IEXTrading {
     protected static function makeRequest( $method, $uri ) {
         $client = IEXTrading::getClient();
         try {
-            return $client->request( $method, $uri );
+            return $client->request( $method, $uri . '?token=' . self::$apiToken );
         } catch ( ClientException $clientException ) {
             if ( 'Unknown symbol' == $clientException->getResponse()->getBody() ):
                 throw new UnknownSymbol( "IEXTrading.com replied with: " . $clientException->getResponse()->getBody() );

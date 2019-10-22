@@ -24,10 +24,10 @@ class StockChartDay extends StockChartData {
         $this->date             = $dataPoint[ 'date' ];
         $this->open             = $dataPoint[ 'open' ];
         $this->close            = $dataPoint[ 'close' ];
-        $this->unadjustedVolume = $dataPoint[ 'unadjustedVolume' ];
+        // $this->unadjustedVolume = $dataPoint[ 'unadjustedVolume' ];
         $this->change           = $dataPoint[ 'change' ];
         $this->changePercent    = $dataPoint[ 'changePercent' ];
-        $this->vwap             = $dataPoint[ 'vwap' ];
+        // $this->vwap             = $dataPoint[ 'vwap' ];
         $this->high             = $dataPoint[ 'high' ];
         $this->low              = $dataPoint[ 'low' ];
         $this->volume           = $dataPoint[ 'volume' ];
