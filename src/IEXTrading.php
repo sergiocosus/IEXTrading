@@ -14,8 +14,8 @@ use DPRMC\IEXTrading\Responses\StockPeers;
 use DPRMC\IEXTrading\Responses\StockPrice;
 use DPRMC\IEXTrading\Responses\StockQuote;
 use DPRMC\IEXTrading\Responses\StockRelevant;
-use DPRMC\IEXTrading\Responses\StockSymbols;
 use DPRMC\IEXTrading\Responses\StockStats;
+use DPRMC\IEXTrading\Responses\StockSymbols;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
@@ -30,26 +30,50 @@ class IEXTrading {
 
     /**
      * @param string $ticker Use market to get market-wide news
-     * @param null   $items  How many news items do you want? Number between 1 and 50. Default is 10
+     * @param null $items How many news items do you want? Number between 1 and 50. Default is 10
      *
      * @return \DPRMC\IEXTrading\Responses\StockNews
      * @throws \DPRMC\IEXTrading\Exceptions\ItemCountPassedToStockNewsOutOfRange
      * @throws \DPRMC\IEXTrading\Exceptions\UnknownSymbol
      * @throws \Exception
      */
-    public static function stockNews( $ticker = 'market', $items = null ) {
-        if ( isset( $items ) && ( $items < 1 || $items > 50 ) ):
-            throw new ItemCountPassedToStockNewsOutOfRange( "If you pass in a date it needs to be a number between 1 and 50. You passed in " . $items );
+    public static function stockNews($ticker = 'market', $items = null) {
+        if (isset($items) && ($items < 1 || $items > 50)):
+            throw new ItemCountPassedToStockNewsOutOfRange("If you pass in a date it needs to be a number between 1 and 50. You passed in " . $items);
         endif;
 
-        if ( isset( $items ) ):
+        if (isset($items)):
             $uri = 'stock/' . $ticker . '/news/last/' . $items;
         else:
             $uri = 'stock/' . $ticker . '/news';
         endif;
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockNews( $response );
+        return new StockNews($response);
+    }
+
+    /**
+     * @param string $ticker Use market to get market-wide news
+     * @param null $items How many news items do you want? Number between 1 and 50. Default is 10
+     *
+     * @return \DPRMC\IEXTrading\Responses\StockNews
+     * @throws \DPRMC\IEXTrading\Exceptions\ItemCountPassedToStockNewsOutOfRange
+     * @throws \DPRMC\IEXTrading\Exceptions\UnknownSymbol
+     * @throws \Exception
+     */
+    public static function stockBatch($symbols = [], $items = null, $types = ['news']) {
+        if (isset($items) && ($items < 1 || $items > 50)):
+            throw new ItemCountPassedToStockNewsOutOfRange("If you pass in a date it needs to be a number between 1 and 50. You passed in " . $items);
+        endif;
+
+        $uri = 'stock/market/batch';
+
+        $response = IEXTrading::makeRequest('GET', $uri, [
+            'symbols' => implode(',', $symbols),
+            'types' => implode(',', $types)
+        ]);
+
+        return new StockNews($response);
     }
 
     /**
@@ -59,11 +83,11 @@ class IEXTrading {
      * @throws \DPRMC\IEXTrading\Exceptions\UnknownSymbol
      * @throws \Exception
      */
-    public static function stockStats( $ticker ) {
+    public static function stockStats($ticker) {
         $uri      = 'stock/' . $ticker . '/stats';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockStats( $response );
+        return new StockStats($response);
     }
 
     /**
@@ -73,56 +97,55 @@ class IEXTrading {
      * @throws \DPRMC\IEXTrading\Exceptions\UnknownSymbol
      * @throws \Exception
      */
-    public static function stockQuote( $ticker ) {
+    public static function stockQuote($ticker) {
         $uri      = 'stock/' . $ticker . '/quote';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockQuote( $response );
+        return new StockQuote($response);
     }
 
-    public static function stockCompany( $ticker ) {
+    public static function stockCompany($ticker) {
         $uri      = 'stock/' . $ticker . '/company';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockCompany( $response );
+        return new StockCompany($response);
     }
 
-    public static function stockPeers( $ticker ) {
+    public static function stockPeers($ticker) {
         $uri      = 'stock/' . $ticker . '/peers';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockPeers( $response );
+        return new StockPeers($response);
     }
 
-    public static function stockRelevant( $ticker ) {
+    public static function stockRelevant($ticker) {
         $uri      = 'stock/' . $ticker . '/relevant';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockRelevant( $response );
+        return new StockRelevant($response);
     }
 
     public static function stockSymbols() {
         $uri      = 'ref-data/symbols';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockSymbols( $response );
+        return new StockSymbols($response);
     }
 
 
-
     /**
-     * @param      string $ticker A valid stock ticker Ex: AAPL for Apple
-     * @param      string $option Valid values: 5y, 2y, 1y, ytd, 6m, 3m, 1m, 1d, date, and dynamic
+     * @param string $ticker A valid stock ticker Ex: AAPL for Apple
+     * @param string $option Valid values: 5y, 2y, 1y, ytd, 6m, 3m, 1m, 1d, date, and dynamic
      * @param null string $date Only used with the 'date' $option passed in. Expected format: yyyymmdd
      *
      * @return StockChart
      * @throws \DPRMC\IEXTrading\Exceptions\InvalidStockChartOption
      * @throws \Exception
      */
-    public static function stockChart( $ticker, $option, $date = null ) {
+    public static function stockChart($ticker, $option, $date = null) {
         $uri = 'stock/' . $ticker . '/chart/' . $option;
 
-        switch ( $option ):
+        switch ($option):
             case '5y':
             case '2y':
             case '1y':
@@ -133,41 +156,41 @@ class IEXTrading {
             case '1d':
             case '5d':
             case 'dynamic':
-                $response = IEXTrading::makeRequest( 'GET', $uri );
+                $response = IEXTrading::makeRequest('GET', $uri);
                 break;
             case 'date':
                 $uri      .= '/' . $date;
-                $response = IEXTrading::makeRequest( 'GET', $uri );
+                $response = IEXTrading::makeRequest('GET', $uri);
                 break;
             default:
-                throw new InvalidStockChartOption( "When calling stockChart() you passed in [" . $option . "] as an option. Valid values are 5y, 2y, 1y, ytd, 6m, 3m, 1m, 1d, date, and dynamic." );
+                throw new InvalidStockChartOption("When calling stockChart() you passed in [" . $option . "] as an option. Valid values are 5y, 2y, 1y, ytd, 6m, 3m, 1m, 1d, date, and dynamic.");
 
         endswitch;
 
-        return new StockChart( $response, $option, $date );
+        return new StockChart($response, $option, $date);
     }
 
-    public static function stockFinancials( $ticker ) {
+    public static function stockFinancials($ticker) {
         $uri      = 'stock/' . $ticker . '/financials';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockFinancials( $response );
+        return new StockFinancials($response);
     }
 
-    public static function stockLogo( $ticker ) {
+    public static function stockLogo($ticker) {
         $uri      = 'stock/' . $ticker . '/logo';
-        $response = IEXTrading::makeRequest( 'GET', $uri );
+        $response = IEXTrading::makeRequest('GET', $uri);
 
-        return new StockLogo( $response );
+        return new StockLogo($response);
     }
 
-    public static function stockPrice( $ticker ) {
+    public static function stockPrice($ticker) {
         $uri        = 'stock/' . $ticker . '/price';
-        $response   = IEXTrading::makeRequest( 'GET', $uri );
-        $jsonString = (string)$response->getBody();
-        $price      = \GuzzleHttp\json_decode( $jsonString, true );
+        $response   = IEXTrading::makeRequest('GET', $uri);
+        $jsonString = (string) $response->getBody();
+        $price      = \GuzzleHttp\json_decode($jsonString, true);
 
-        return (float)$price;
+        return (float) $price;
     }
 
 
@@ -176,10 +199,10 @@ class IEXTrading {
      * @return \GuzzleHttp\Client
      */
     protected static function getClient() {
-        return new Client( [
-                               'verify'   => false,
-                               'base_uri' => IEXTrading::URL,
-                           ] );
+        return new Client([
+            'verify'   => false,
+            'base_uri' => IEXTrading::URL,
+        ]);
     }
 
     /**
@@ -192,16 +215,20 @@ class IEXTrading {
      * @throws \DPRMC\IEXTrading\Exceptions\UnknownSymbol
      * @throws \Exception
      */
-    protected static function makeRequest( $method, $uri ) {
+    protected static function makeRequest($method, $uri, $params = []) {
         $client = IEXTrading::getClient();
         try {
-            return $client->request( $method, $uri . '?token=' . self::$apiToken );
-        } catch ( ClientException $clientException ) {
-            if ( 'Unknown symbol' == $clientException->getResponse()->getBody() ):
-                throw new UnknownSymbol( "IEXTrading.com replied with: " . $clientException->getResponse()->getBody() );
+            return $client->request($method, $uri,
+                [
+                    'query' => array_merge(['token' => self::$apiToken], $params),
+                ]
+            );
+        } catch (ClientException $clientException) {
+            if ('Unknown symbol' == $clientException->getResponse()->getBody()):
+                throw new UnknownSymbol("IEXTrading.com replied with: " . $clientException->getResponse()->getBody());
             endif;
             throw $clientException;
-        } catch ( \Exception $exception ) {
+        } catch (\Exception $exception) {
             throw $exception;
         }
     }

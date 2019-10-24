@@ -17,7 +17,13 @@ class StockNews extends IEXTradingResponse {
         $jsonString = (string)$response->getBody();
         $a          = \GuzzleHttp\json_decode( $jsonString, true );
         foreach ( $a as $newsItem ):
-            $this->items[] = new StockNewsItem( $newsItem );
+            if (isset($newsItem['news']))  {
+                foreach ($newsItem['news'] as $new) {
+                    $this->items[] = new StockNewsItem( $new );
+                }
+            } else {
+                $this->items[] = new StockNewsItem( $newsItem );
+            }
         endforeach;
     }
 
