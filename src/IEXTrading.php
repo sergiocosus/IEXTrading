@@ -70,7 +70,8 @@ class IEXTrading {
 
         $response = IEXTrading::makeRequest('GET', $uri, [
             'symbols' => implode(',', $symbols),
-            'types' => implode(',', $types)
+            'types' => implode(',', $types),
+            'last' => $items
         ]);
 
         return new StockNews($response);
@@ -215,7 +216,7 @@ class IEXTrading {
      * @throws \DPRMC\IEXTrading\Exceptions\UnknownSymbol
      * @throws \Exception
      */
-    protected static function makeRequest($method, $uri, $params = []) {
+    public static function makeRequest($method, $uri, $params = []) {
         $client = IEXTrading::getClient();
         try {
             return $client->request($method, $uri,
