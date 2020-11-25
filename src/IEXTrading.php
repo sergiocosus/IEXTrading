@@ -202,7 +202,7 @@ class IEXTrading {
         $results  = \GuzzleHttp\json_decode($jsonString, true);
 
         return array_map(function ($result){
-            return new StockSymbols($result);
+            return new StockSearch($result);
         }, $results);
     }
 

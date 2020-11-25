@@ -16,9 +16,7 @@ class StockSearch extends IEXTradingResponse {
      *
      * @param $response
      */
-    public function __construct( $response ) {
-        $jsonString             = (string)$response->getBody();
-        $a                      = \GuzzleHttp\json_decode( $jsonString, true );
+    public function __construct( $a ) {
         $this->symbol           = $a[ 'symbol' ];
         $this->securityName      = $a[ 'securityName' ];
         $this->securityType      = $a[ 'securityType' ];
