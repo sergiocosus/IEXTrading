@@ -199,9 +199,11 @@ class IEXTrading {
         $uri        = 'search/' .urlencode($search);
         $response   = IEXTrading::makeRequest('GET', $uri);
         $jsonString = (string) $response->getBody();
-        $price      = \GuzzleHttp\json_decode($jsonString, true);
+        $results  = \GuzzleHttp\json_decode($jsonString, true);
 
-        return new StockSearch($response);
+        return array_map(function ($result){
+            return new StockSymbols($result);
+        }, $results);
     }
 
 
