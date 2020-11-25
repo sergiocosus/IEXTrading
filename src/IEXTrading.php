@@ -14,6 +14,7 @@ use DPRMC\IEXTrading\Responses\StockPeers;
 use DPRMC\IEXTrading\Responses\StockPrice;
 use DPRMC\IEXTrading\Responses\StockQuote;
 use DPRMC\IEXTrading\Responses\StockRelevant;
+use DPRMC\IEXTrading\Responses\StockSearch;
 use DPRMC\IEXTrading\Responses\StockStats;
 use DPRMC\IEXTrading\Responses\StockSymbols;
 use GuzzleHttp\Client;
@@ -192,6 +193,15 @@ class IEXTrading {
         $price      = \GuzzleHttp\json_decode($jsonString, true);
 
         return (float) $price;
+    }
+
+    public static function stockSearch($search) {
+        $uri        = 'search/' .urlencode($search);
+        $response   = IEXTrading::makeRequest('GET', $uri);
+        $jsonString = (string) $response->getBody();
+        $price      = \GuzzleHttp\json_decode($jsonString, true);
+
+        return new StockSearch($response);
     }
 
 
